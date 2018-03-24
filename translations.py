@@ -28,6 +28,10 @@ class NetworkTranslator:
         for attrName in attributes:
             if attrName in self.AttributeInterfaces:
                 installInterfaces.append(self.AttributeInterfaces[attrName])
+
+        # Not sure if it is OK
+        installInterfaces.append(self.AttributeInterfaces['arbitrarymobile'])
+
         for interface in installInterfaces:
             print("loading interface", interface)
             for command in interface.COMMANDS:
