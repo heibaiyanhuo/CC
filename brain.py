@@ -25,6 +25,8 @@ def brainLoop():
     hb = None
     gameDataStream = b""
 
+    exploration = False
+
     while True:
         loop += 1
         gameData = os.read(gameSocket.fileno(), 1024) # max of 1024
@@ -44,7 +46,6 @@ def brainLoop():
         try:
             if ccSocket:
                 ccData = os.read(ccSocket.fileno(), 1024)
-                print(ccData)
             else:
                 ccData = b""
         except:
@@ -53,14 +54,14 @@ def brainLoop():
 
         if gameData and ccSocket:
             try:
+                print(gameData)
                 os.write(ccSocket.fileno(), gameData)
             except:
                 ccSocket = None
         if ccData:
-            print('########$$$$$$1')
             if ccData[4:11] == b'explore':
-                print('##########$$$$$2')
-                direction = 'north'
+                exploration = True
+                direction = 'north-east'
                 marshall_move_cmd = 'CMD move braininterface/1.0\nDirection: {}\nContent_length: 0\n\n'.format(direction).encode()
                 for i in range(10):
                     os.write(gameSocket.fileno(), marshall_move_cmd)
