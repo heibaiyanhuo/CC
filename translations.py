@@ -302,20 +302,7 @@ class MobileAttributeInterface:
     EVENTS = [MoveCompleteEvent]
     RESPONSES = []
 NetworkTranslator.RegisterAttributeInterface(MobileAttributeInterface)
-        
-class ScanCommand:
-    CMD = b"scan"
-    
-    @classmethod
-    def Marshall(cls, cmd):
-        message = b"CMD scan braininterface/1.0\n"
-        message += b"Content_length: 0\n"
-        message += b"\n" # END
-        return message
-        
-    @classmethod
-    def Unmarshall(cls, headers, body):
-        return cls()
+
 
 class ExploreCommand:
     CMD = b'explore'
@@ -327,6 +314,28 @@ class ExploreCommand:
         message += b'\n'
         return message
     
+    @classmethod
+    def Unmarshall(cls, headers, body):
+        return cls()
+
+class ArbitraryMobileAttributeInterface:
+    ATTRIBUTE_NAME = "arbitrarymobile"
+    COMMANDS = [ExploreCommand]
+    EVENTS = []
+    RESPONSES = []
+NetworkTranslator.RegisterAttributeInterface(ArbitraryMobileAttributeInterface)
+
+
+class ScanCommand:
+    CMD = b"scan"
+    
+    @classmethod
+    def Marshall(cls, cmd):
+        message = b"CMD scan braininterface/1.0\n"
+        message += b"Content_length: 0\n"
+        message += b"\n" # END
+        return message
+        
     @classmethod
     def Unmarshall(cls, headers, body):
         return cls()
