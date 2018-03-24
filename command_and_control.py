@@ -30,6 +30,7 @@ class RemoteControlProtocol(asyncio.Protocol):
                     message = self.buffer[:index]
                     self.buffer = self.buffer[index+2:]
                     self.waitingMessage = self.translator.processHeader(message)
+                    print(self.waitingMessage)
                 else: return
             else:
                 headerType, headerArg, headers = self.waitingMessage
