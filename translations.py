@@ -316,7 +316,21 @@ class ScanCommand:
     @classmethod
     def Unmarshall(cls, headers, body):
         return cls()
+
+class ExploreCommand:
+    CMD = b'explore'
+
+    @classmethod
+    def Marshall(cls, cmd):
+        message = b'CMD expolre braininterface/1.0\n'
+        message += b'Content_length: 0\n'
+        message += b'\n'
+        return message
     
+    @classmethod
+    def Unmarshall(cls, headers, body):
+        return cls()
+
 class ScanResponse:
     RESPONSE = b"scan_response"
     
