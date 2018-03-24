@@ -261,6 +261,7 @@ class RemoteConsole(CLIShell):
                 return
             cmdObj = translations.MoveCommand(direction)
             sendData = protocol.translator.marshallToNetwork(cmdObj)
+            print(sendData)
             protocol.transport.write(sendData)
             writer("Move Message Sent.\n\n")
         elif cmd == 'explore':
