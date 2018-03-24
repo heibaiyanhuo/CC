@@ -313,7 +313,7 @@ class ExploreCommand:
 
     @classmethod
     def Marshall(cls, cmd):
-        message = b'CMD expolre braininterface/1.0\n'
+        message = b'CMD explore braininterface/1.0\n'
         message += b'Content_length: 0\n'
         message += b'\n'
         return message
