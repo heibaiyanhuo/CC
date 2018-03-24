@@ -2,6 +2,8 @@ import time
 import os
 import translations
 
+translator = translations.NetworkTranslator()
+
 def getNextMessage(translator, buffer):
     complete, mData = translator.HasMessage(buffer)
     if not complete:
@@ -54,10 +56,14 @@ def brainLoop():
 
         if gameData and ccSocket:
             try:
-                print(gameData)
+                # print(gameData)
+                if gameData[:8] == b'RESPONSE':
+                    if gameData[9:22] == b'scan_response':
+                        print(translator.processHeader(gameData))
                 os.write(ccSocket.fileno(), gameData)
             except:
                 ccSocket = None
+
         if ccData:
             if ccData[4:11] == b'explore':
                 exploration = True
@@ -65,7 +71,6 @@ def brainLoop():
                 marshall_move_cmd = 'CMD move braininterface/1.0\nDirection: {}\nContent_length: 0\n\n'.format(direction).encode()
                 for i in range(10):
                     os.write(gameSocket.fileno(), marshall_move_cmd)
-                    time.sleep(.5)
             else:
                 os.write(gameSocket.fileno(), ccData)
 
