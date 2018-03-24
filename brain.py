@@ -58,7 +58,7 @@ def brainLoop():
                 ccSocket = None
         if ccData:
             print('########$$$$$$1')
-            if ccData[4:8] == b'explore':
+            if ccData[4:11] == b'explore':
                 print('##########$$$$$2')
                 direction = 'north'
                 marshall_move_cmd = 'CMD move braininterface/1.0\nDirection: {}\nContent_length: 0\n\n'.format(direction).encode()
