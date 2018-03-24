@@ -263,6 +263,9 @@ class RemoteConsole(CLIShell):
             sendData = protocol.translator.marshallToNetwork(cmdObj)
             protocol.transport.write(sendData)
             writer("Move Message Sent.\n\n")
+        elif cmd == 'explore':
+            protocol.transport.write(b'explore')
+            writer('Explore Message Send.\n\n')
         elif cmd == "status":
             protocol.transport.write(protocol.translator.marshallToNetwork(translations.StatusCommand()))
         else:
