@@ -59,6 +59,7 @@ def brainLoop():
                 # print(gameData)
                 if gameData[:8] == b'RESPONSE':
                     if gameData[9:22] == b'scan_response':
+                        print('$$$$$$$$$$$$')
                         print(translator.processHeader(gameData))
                 os.write(ccSocket.fileno(), gameData)
             except:
