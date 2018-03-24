@@ -2,7 +2,6 @@ import time
 import os
 import translations
 
-translator = translations.NetworkTranslator()
 
 def getNextMessage(translator, buffer):
     complete, mData = translator.HasMessage(buffer)
