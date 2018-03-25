@@ -161,10 +161,16 @@ class RemoteConsole(CLIShell):
         elif isinstance(data, translations.ResultResponse):
             self.transport.write("Result: {}\n\n".format(data.message))
         elif isinstance(data, translations.ScanResponse):
-            self.transport.write(self.createScanResultsDisplay(data.scanResults))
-            self.transport.write("\n")
+            if self.in_exploration:
+                self.ramble.next_move(data.scanResults)
+            else:
+                self.transport.write(self.createScanResultsDisplay(data.scanResults))
+                self.transport.write("\n")
         elif isinstance(data, translations.MoveCompleteEvent):
-            self.transport.write("Move result: {}\n\n".format(data.message))
+            if self.in_exploration:
+                self.ramble.next_scan()
+            else:
+                self.transport.write("Move result: {}\n\n".format(data.message))
         elif isinstance(data, translations.ObjectMoveEvent):
             if data.status == "insert":
                 verb = "arrived at"
@@ -273,9 +279,12 @@ class RemoteConsole(CLIShell):
                 cmdObj = translations.MoveCommand(direction)
                 sendData = protocol.translator.marshallToNetwork(cmdObj)
                 protocol.transport.write(sendData)
-            self.ramble = Ramble(move)
+            def scan():
+                cmdObj = translations.ScanCommand()
+                sendData = protocol.translator.marshallToNetwork(cmdObj)
+                protocol.transport.write(sendData)
+            self.ramble = Ramble(move, scan)
             self.in_exploration = True
-            pass
         elif cmd == 'stop':
             self.in_exploration = False
             writer('Exploration state out.\n\n')
