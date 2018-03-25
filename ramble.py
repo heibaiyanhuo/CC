@@ -21,6 +21,7 @@ class Ramble:
         self.next_scan()
 
     def next_move(self, scan_result):
+        print(self.scan_count)
         if self.begin_x <= self.end_x or self.begin_y <= self.end_y:
             self.store_map()
             return
