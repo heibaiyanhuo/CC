@@ -86,6 +86,9 @@ class RemoteConsole(CLIShell):
         self.registerCommand(listobjectsHandler)
         self.registerCommand(reprogramHandler)
 
+
+        self.in_exploration = False
+
         coro = playground.create_server(lambda: RemoteControlProtocol(self), port=port, family=serverFamily)
         asyncio.ensure_future(coro)
 
@@ -264,10 +267,19 @@ class RemoteConsole(CLIShell):
             protocol.transport.write(sendData)
             writer("Move Message Sent.\n\n")
         elif cmd == 'explore':
-            cmdObj = translations.ExploreCommand()
-            sendData = protocol.translator.marshallToNetwork(cmdObj)
-            protocol.transport.write(sendData)
-            writer('Explore Message Send.\n\n')
+            # cmdObj = translations.ExploreCommand()
+            # sendData = protocol.translator.marshallToNetwork(cmdObj)
+            # protocol.transport.write(sendData)
+            # writer('Explore Message Send.\n\n')
+            for i in range(10):
+                cmdObj = translations.MoveCommand('south')
+                sendData = protocol.translator.marshallToNetwork(cmdObj)
+                protocol.transport.write(sendData)
+            self.in_exploration = True
+            pass
+        elif cmd == 'stop':
+            self.in_exploration = False
+            writer('Exploration state out.\n\n')
         elif cmd == "status":
             protocol.transport.write(protocol.translator.marshallToNetwork(translations.StatusCommand()))
         else:

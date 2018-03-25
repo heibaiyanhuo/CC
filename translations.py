@@ -311,7 +311,7 @@ NetworkTranslator.RegisterAttributeInterface(MobileAttributeInterface)
 class ExploreCommand:
     CMD = b'explore'
 
-    @classmethod
+    @classmethod 
     def Marshall(cls, cmd):
         message = b'CMD explore braininterface/1.0\n'
         message += b'Content_length: 0\n'
