@@ -13,9 +13,17 @@ class Ramble:
         self.curr_direction = 'west'
         self.need_check = True
 
+        self.begin_x = MAP_SIZE - 1 - (VIEW_DEPTH - 2)
+        self.end_x = VIEW_DEPTH - 2
+        self.begin_y = MAP_SIZE - 1 - (VIEW_DEPTH - 2)
+        self.end_y = VIEW_DEPTH - 2
+
         self.next_scan()
 
     def next_move(self, scan_result):
+        if self.begin_x <= self.end_x or self.begin_y <= self.end_y:
+            self.store_map()
+            return
         self_x, self_y = -1, -1
         for coord, obj_data_list in scan_result:
             x, y = coord
@@ -35,31 +43,43 @@ class Ramble:
                         self.enemies[x][y] = 1
 
         if self.curr_direction == 'west':
-            if self_x > 0:
+            if self_x > self.end_x:
                 if self.enemies[self_x - 1][self_y] == 1:
                     self.move('south-west')
                 else:
                     self.move('west')
             else:
-                self.store_map()
-                # self.curr_direction = 'south'
-                # self.move('south')
-        elif self.curr_direction == 'south':
-            if self_y != 0:
+                self.begin_y -= (VIEW_DEPTH - 1)
+                self.curr_direction = 'south'
                 self.move('south')
+        elif self.curr_direction == 'south':
+            if self_y > self.end_y:
+                if self.enemies[self_x][self_y - 1] == 1:
+                    self.move('south-east')
+                else:
+                    self.move('south')
             else:
+                self.end_x += (VIEW_DEPTH - 1)
                 self.curr_direction = 'east'
                 self.move('east')
         elif self.curr_direction == 'east':
-            if self_x != 49:
-                self.move('east')
+            if self_x < self.begin_x:
+                if self.enemies[self_x + 1][self_y] == 1:
+                    self.move('north-east')
+                else:
+                    self.move('east')
             else:
+                self.end_y += (VIEW_DEPTH - 1)
                 self.curr_direction = 'north'
                 self.move('north')
         else:
-            if self_y != 49:
-                self.move('north')
+            if self_y < self.begin_y:
+                if self.enemies[self_x][self_y + 1] == 1:
+                    self.move('north-west')
+                else:
+                    self.move('north')
             else:
+                self.begin_x -= (VIEW_DEPTH - 1)
                 self.curr_direction = 'west'
                 self.move('west')
 
