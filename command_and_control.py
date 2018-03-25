@@ -119,7 +119,6 @@ class RemoteConsole(CLIShell):
         textPart = ""
         mapLine = ""
         lastY = None
-        print(scanResults)
         for coord, objDataList in scanResults:
             x,y = coord
             if y != lastY:
@@ -166,7 +165,7 @@ class RemoteConsole(CLIShell):
                 self.ramble.next_move(data.scanResults)
             else:
                 self.transport.write(self.createScanResultsDisplay(data.scanResults))
-            self.transport.write("\n")
+                self.transport.write("\n")
         elif isinstance(data, translations.MoveCompleteEvent):
             self.transport.write("Move result: {}\n\n".format(data.message))
             if self.in_exploration:
@@ -275,16 +274,20 @@ class RemoteConsole(CLIShell):
             protocol.transport.write(sendData)
             writer("Move Message Sent.\n\n")
         elif cmd == 'explore':
-            def move(direction):
-                cmdObj = translations.MoveCommand(direction)
-                sendData = protocol.translator.marshallToNetwork(cmdObj)
-                protocol.transport.write(sendData)
-            def scan():
-                cmdObj = translations.ScanCommand()
-                sendData = protocol.translator.marshallToNetwork(cmdObj)
-                protocol.transport.write(sendData)
-            self.ramble = Ramble(move, scan)
-            self.in_exploration = True
+            if self.ramble is not None:
+                self.in_exploration = True
+                self.ramble.next_scan()
+            else:
+                def move(direction):
+                    cmdObj = translations.MoveCommand(direction)
+                    sendData = protocol.translator.marshallToNetwork(cmdObj)
+                    protocol.transport.write(sendData)
+                def scan():
+                    cmdObj = translations.ScanCommand()
+                    sendData = protocol.translator.marshallToNetwork(cmdObj)
+                    protocol.transport.write(sendData)
+                self.ramble = Ramble(move, scan)
+                self.in_exploration = True
         elif cmd == 'stop':
             self.in_exploration = False
             writer('Exploration state out.\n\n')
