@@ -1,5 +1,5 @@
 
-MAP_SIZE = 50
+MAP_SIZE = 100
 VIEW_DEPTH = 4
 
 class Ramble:
@@ -38,7 +38,7 @@ class Ramble:
                         if self.scan_count == MAP_SIZE * MAP_SIZE:
                             self.store_map()
                 elif d['type'] == 'object':
-                    if d['identifier'] == 'game_object_1':
+                    if d['identifier'] == 'game_object_6':
                         self_x, self_y = x, y
                     else:
                         self.enemies[x][y] = 1
