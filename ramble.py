@@ -36,10 +36,14 @@ class Ramble:
 
         if self.curr_direction == 'west':
             if self_x > 0:
-                self.move('west')
+                if self.enemies[self_x - 1][self_y] == 1:
+                    self.move('south-west')
+                else:
+                    self.move('west')
             else:
-                self.curr_direction = 'south'
-                self.move('south')
+                self.store_map()
+                # self.curr_direction = 'south'
+                # self.move('south')
         elif self.curr_direction == 'south':
             if self_y != 0:
                 self.move('south')
