@@ -119,6 +119,7 @@ class RemoteConsole(CLIShell):
         textPart = ""
         mapLine = ""
         lastY = None
+        print(scanResults)
         for coord, objDataList in scanResults:
             x,y = coord
             if y != lastY:

@@ -9,6 +9,7 @@ class Ramble:
 
     def next_move(self, scan_result):
         self.move('south')
+        self.move('south')
     
     def next_scan(self):
         self.scan()
